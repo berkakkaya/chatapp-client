@@ -2,10 +2,14 @@
 
 ## Proje Hakkında
 
-Şifreli Mesajlaşma Uygulaması'nın istemci kısmıdır.
-Bu proje Dündar Çiloğlu Programlama Takımı'nın kodları incelemesi ve geliştirilmesi için Github'a yüklenmiştir.
+Şifreli Mesajlaşma Uygulaması'nın istemci kodlarıdır.
 
-**Not: _Bu projenin kaynak kodlarını bu grup dışında başka bir kişi ile paylaşmak yasaktır._**
+Projenin asıl amacı şifreleme sisteminin mantığını göstermektir ve Python'da bir mesajlaşma uygulamasının nasıl yapılabileceğini göstermektir.
+Eğitim amaçlı hazırlanmıştır. Projeyi kullanmak istiyorsanız aşağıdaki notu okuyun.
+
+_**Önemli Not: Hem sunucu hem de istemci uygulamalarının sade haliyle kullanılması tavsiye edilmez. Uygulamalarda güvenlik sorunları mevcut**_
+_**(paketi gönderme biçiminden kaynaklı) ve bazen hız problemleri yaşıyorlar**_
+_**(sorun RSA modülünden kaynaklı, çünkü anahtarları her seferinde sıfırdan üretiyor).**_
 
 _Not: Şifreli Mesajlaşma Uygulaması'nın sunucu kodlarına [buradan ulaşabilirsiniz.](https://github.com/berkakkaya/chatapp-server)_
 
@@ -75,7 +79,7 @@ Sonraki sayfada dalda yaptığınız bütün değişiklikleri gösteren bir sayf
 Bu sayfada en üstte `base` ayarının master'da, `compare` ayarının da düzenlemeleri yaptığınız dalda olduğundan emin olunuz.
 Daha sonra yaptığınız düzenlemeler için bir başlık girin, yaptığınız düzenlemeleri anlaşılabilir bir şekilde açıklayın.
 İsterseniz de dosyaları açıklamaya doğru sürükleyerek dosya iliştirebilirsiniz.
-Hazır olduğunuzda `Create pull request` butonuna tıklayın:
+Hazır olduğunuzda `Create pull request` butonuna tıklayın. Tıklamanız gereken buton aşağıdaki örnek resimde gösterilmiştir:
 ![Pull request sayfası](./md/3.png)
 
 ### 4) Sonraki adımlar
