@@ -53,7 +53,7 @@ Sadece sonraki düzenlemede düzenlemeleri dala eklemeyi unutmayın.
 
 ### 3) Düzenlemeleri incelenmesi için paylaşmak
 
-Not: *Bu adımları tüm düzenlemelerinizi bitirdiğinizde ve artık düzenleme yaptığınız dalın projeye uygulamak için hazır olduğunda izleyin.*
+Not: *Bu adımları tüm düzenlemelerinizi bitirdiğinizde ve artık düzenleme yaptığınız dalın projeye uygulanmak için hazır olduğunda izleyin.*
 
 Düzenlemeniz bittiğinde düzenlemelerinizi yaptığınız dalı master (git sisteminde ana dal) ile birleştirmek (merge) gerekir.
 
