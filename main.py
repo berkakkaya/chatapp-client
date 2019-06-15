@@ -1,27 +1,38 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 """
-Mesajlaşma uygulaması
-Hazırlayanlar: Berk Akkaya ve Ozan Alptekin
+!              Şifreli Mesajlaşma Uygulaması - İstemci
+!            Hazırlayanlar: Berk Akkaya ve Ozan Alptekin
 
-=================== YAPILACAKLAR LİSTESİ =========================
-Şu anlık bir şey yok.
+?=================== YAPILACAKLAR LİSTESİ =========================?
+* Şu anlık bir şey yok.
 """
 
-import socketio
-import sys
-from time import sleep
-from src.cheaserDecrypt import decrypt
-from src.cheaserEncrypt import encrypt
-import src.rsa as rsa
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from plyer import notification
-import random
+import socketio #? Sunucu ile iletişimi sağlamaya yarayan modül.
+import sys #? İşletim sisteminden bilgi almamızı sağlayacak modül.
+from src.cheaserDecrypt import decrypt #? Sezar şifreleme yönteminde kullanılacak şifre çözme metodu.
+from src.cheaserEncrypt import encrypt #? Sezar şifreleme yönteminde kullanılacak şifreleme metodu.
+import src.rsa as rsa #? RSA şifrelemede kullanılacak bir moduül.
+from PyQt5.QtWidgets import * #? PyQT uygulamamızda kullanacağımız Widgetler
+from PyQt5.QtGui import * #? PyQT arayüz bileşenleri
+from PyQt5.QtCore import * #? PyQT sinyalizasyon fonksiyonları ve gerekli ana fonksiyonlar
+from plyer import notification #? Bildirim göndermemizi sağlayan modül.
+import random #? Rastgele renk seçiminde kullanılacak olan modül.
 
+#? Sunucuyla bağlantı sağlayacak olan socketi yapılandırır.
 websocket = socketio.Client()
 
 class App(QMainWindow):
+    """
+    ? Uygulama arayüz kısmında PyQT altyapısını kullanıyor.
+    ? Uygulamamızı oluştururken PyQT'ye oluşturacağımız uygulama ile ilgili bilgileri bu sınıfta veririz ve arayüzü hazırlarız.
+    """
+
     def __init__(self, monitor):
+        """
+        ? Belirli uygulama özelliklerinin belirtildiği fonksiyondur. Ayrıca arayüzü hazırlar.
+        """
         super().__init__()
         self.title = 'Şifreli Mesajlaşma Programı'
         self.left = 0
@@ -38,11 +49,19 @@ class App(QMainWindow):
         self.table_widget = Widgets(self, monitor=self.monitor, statusBar=self.statusBar)
         self.setCentralWidget(self.table_widget)
 
+        self.setWindowIcon(QIcon("./speech-bubble.png"))
+
         self.show()
 
 class Widgets(QWidget):
-
+    """
+    ? Arayüz bileşenlerinin tanıtıldığı ve hazırlandığı sınıftır.
+    """
     def __init__(self, parent, monitor, statusBar):
+        """
+        ? Bu fonksiyon arayüzün bütün bileşenlerini tanıtır ve uygulamayı kullanıma hazırlar.
+        """
+
         super(QWidget, self).__init__(parent)
         self.layout = QVBoxLayout(self)
 
@@ -53,32 +72,28 @@ class Widgets(QWidget):
         self.isLogined = False
         self.isReady = False
 
-        #Renkleri tanımla
-        #self.colors = {
-        #    "red": "#ff0000",
-        #    "blue": "#00a1ff",
-        #    "orange": "#ff5000",
-        #    "purple": "#6e00ff",
-        #    "green": "#3bff00"
-        #}
+        self.messageHistory = "" #? Mesaj geçmişi bu değişkende saklanır.
 
-        self.colorkeys = ["red", "blue", "orange", "purple", "green"]
+        self.adminCommands = [] #? Yönetici komutları burada belirtilir. Şu anlık olmadığı için boştur.
+        self.commands = ["!renkdeğiştir"] #? Kullanıcıların kullanabileceği komutlar burada belirtilir.
         
-        #Sekme ekranını hazırla
+        #? Sekme ekranını hazırla
         self.tabs = QTabWidget()
         self.tab1 = QWidget()
         self.tab2 = QWidget()
         self.tab3 = QWidget()
         self.tab4 = QWidget()
+        self.tab5 = QWidget()
         self.tabs.resize(450, 700)
         
-        #Sekmeleri programa tanımla
+        #? Sekmeleri uygulamada tanımla
         self.tabs.addTab(self.tab1, "Giriş Yap")
         self.tabs.addTab(self.tab2, "Sohbet")
         self.tabs.addTab(self.tab3, "Şifreleme Ayarları")
-        self.tabs.addTab(self.tab4, "Program Hakkında")
+        self.tabs.addTab(self.tab4, "Yönetici Paneli")
+        self.tabs.addTab(self.tab5, "Program Hakkında")
         
-        #Birinci Sekmeyi oluştur. - Giriş Yap
+        #? Birinci Sekmeyi oluştur. - Giriş Yap
         self.tab1.layout = QVBoxLayout(self)
 
         self.inputContainer = QWidget()
@@ -86,7 +101,6 @@ class Widgets(QWidget):
         self.tab1.layout.setSpacing(1)
         
         self.loginTitle = QLabel("Hoş geldiniz!")
-        self.loginTitle.setObjectName("LoginTitle")
         self.loginTitle.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.loginTitleFont = QFont("Droid Sans", 24, QFont.Bold)
         self.loginTitle.setAlignment(Qt.AlignCenter)
@@ -114,7 +128,7 @@ class Widgets(QWidget):
         self.tab1.layout.addWidget(self.loginButton)
         self.tab1.setLayout(self.tab1.layout)
 
-        #İkinci sekmeyi oluştur - Sohbet
+        #? İkinci sekmeyi oluştur - Sohbet
         self.tab2.layout = QVBoxLayout(self)
         self.tab2.layout.setSpacing(1)
 
@@ -141,7 +155,7 @@ class Widgets(QWidget):
 
         self.tab2.setLayout(self.tab2.layout)
 
-        #Üçüncü sekmeyi oluştur - Şifreleme Ayarları
+        #? Üçüncü sekmeyi oluştur - Şifreleme Ayarları
         self.tab3.layout = QGridLayout(self)
         self.tab3.layout.setSpacing(1)
         
@@ -184,41 +198,87 @@ class Widgets(QWidget):
 
         self.tab3.setLayout(self.tab3.layout)
 
-        #Dördüncü sekmeyi oluştur - Program Hakkında
+        #? Dördüncü sekmeyi oluştur - Admin Paneli
+        
         self.tab4.layout = QVBoxLayout(self)
-        self.info = QLabel("""
-        Sezar ve RSA Şifreleyici v1.0
-        Geliştiriciler:
-        - Berk Akkaya
-        - Ozan Alptekin
-        """)
 
-        self.tab4.layout.addWidget(self.info)
+        self.adminTitle = QLabel("Yönetici Paneli")
+        self.adminTitle.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.adminTitleFont = QFont("Droid Sans", 24, QFont.Bold)
+        self.adminTitle.setAlignment(Qt.AlignCenter)
+        self.adminTitle.setFont(self.adminTitleFont)
+
+        self.spacer = QLabel("\n\n\n\n\n\n\n\n\n\nYakında yeni komutlar gelecek.")
+        self.spacerFont = QFont("Droid Sans", 10, QFont.StyleItalic)
+        self.spacer.setFont(self.spacerFont)
+        self.spacer.setAlignment(Qt.AlignCenter)
+
+        self.tab4.layout.addWidget(self.adminTitle)
+        self.tab4.layout.addWidget(self.spacer)
+
         self.tab4.setLayout(self.tab4.layout)
 
-        #Widget'e yeni sekmeler ekle
+        #? Dördüncü sekmeyi oluştur - Program Hakkında
+        self.tab5.layout = QVBoxLayout(self)
+        self.info = QLabel("""Şifreli Mesajlaşma Uygulaması v1.0\nGeliştiriciler:\n- Berk Akkaya\n- Ozan Alptekin""")
+        self.info.setFont(QFont("Droid Sans", 15, QFont.Bold))
+        self.info.setAlignment(Qt.AlignCenter)
+        self.info.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+        self.tab5.layout.addWidget(self.info)
+        self.tab5.setLayout(self.tab5.layout)
+
+        #? Hazırlanan sekmeler arayüze eklenir
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
 
+        #? Yeni mesaj geldiğinde gelen sinyal changeHistory fonksiyonuna bağlanır
         self.monitor.updateText.connect(self.changeHistory)
 
+    def pickcolor(self):
+        """
+        ? Rastgele bir HEX rengi üretmeyi sağlar.
+        """
+        r = lambda: random.randint(0, 255)
+        return "#{:02x}{:02x}{:02x}".format(r(), r(), r()).upper()
+
     def usernameChanged(self):
+        """
+        ? Kullanıcı adı kutusu değiştiğinde anlık olarak giriş ekranındaki başlığı değiştiren fonksiyondur
+        """
         if self.nameBox.text():
             self.loginTitle.setText("Hoş geldiniz, {}!".format(self.nameBox.text()))
         else:
             self.loginTitle.setText("Hoş geldiniz!")
 
     def changeHistory(self, data):
-        print("Geçmiş değiştiriliyor...")
-        if self.isLogined and self.isReady:
-            self.chatBox.setText(data)
-            print("İşlem tamam!")
+        """
+        ? Gösterilmeye hazırlanan yeni mesaj bu fonksiyonla mesaj geçmişine eklenir ve kullanıcıya gösterilir.
+        ? Ayrıca bu fonksiyon kullanıcıya yeni mesajı bildirmek için bir bidirim de gönderir.
+        """
+
+        if data["messageHistory"][:13] == "!clearHistory": #? Gelen mesajın mesaj temizleme komutu olup olmadığına bak.
+            self.messageHistory = "<font color=\"#F12345\">Mesaj geçmişi temizlendi.</font><br><br>"
+            self.chatBox.setHtml(self.messageHistory)
+            self.chatBox.moveCursor(QTextCursor.End)
+            print("Mesaj geçmişi temizlendi.")
         else:
-            print("Oturum açılmamış... TAMAM")
-        self.chatBox.moveCursor(QTextCursor.End)
-        notification.notify(title="Yeni mesajınız var.", message="<b>Uygulamaya bakmayı unutmayın.</b>", app_name="Şifreli Mesajlaşma Uygulaması", timeout=10)
+            print("Geçmiş değiştiriliyor...")
+            if self.isLogined and self.isReady:
+                self.messageHistory += data["messageHistory"]
+                self.chatBox.setHtml(self.messageHistory)
+                self.chatBox.moveCursor(QTextCursor.End)
+                notification.notify(title="{0} yeni mesaj gönderdi.".format(data["username"]), message="Uygulamaya gitmek için bildirime tıklayın.", app_name="Şifreli Mesajlaşma Uygulaması", app_icon="./speech-bubble.png", timeout=10)
+                print("İşlem tamam!")
+            else:
+                print("Oturum açılmamış... TAMAM")
     
     def login(self):
+        """
+        ? Kullanıcının sunucuya bağlanmasını ve mesaj odasına giriş yapmasını sağlayan fonksiyondur.
+        ? Ayrıca kullanıcının rengi bu kısımda rastgele seçilir.
+        """
+        self.color = self.pickcolor()
         self.username = self.nameBox.text()
         self.server = self.serverBox.text()
         if self.username == "" or self.server == "":
@@ -227,9 +287,9 @@ class Widgets(QWidget):
             self.connectionStatus.showMessage("Durum: Bağlanılıyor...")
             try:
                 websocket.connect(self.server)
-                websocket.emit("newUser", {"username": self.username})
+                print("Renk:", self.color)
+                websocket.emit("newUser", {"username": self.username, "color": self.color})
                 self.isLogined = True
-                #self.color = self.colors[random.choice(self.colorkeys)]
                 self.messageBox.setEnabled(True)
                 self.sendButton.setEnabled(True)
                 self.nameBox.setEnabled(False)
@@ -242,69 +302,163 @@ class Widgets(QWidget):
                 self.connectionStatus.showMessage("Durum: Sunucuya bağlanılamadı.")
 
     def sendMessage(self):
+        """
+        ? Kullanıcının yazdığı mesajın gönderilmesini sağlayan fonksiyondur.
+        """
         data = {
             "username": self.username,
-            "message": self.messageBox.text()
-            #"encryptType": self.encryptType
-            #"color": self.color
+            "message": self.messageBox.text(),
+            "encryptType": self.encryptType,
+            "color": self.color
         }
         self.messageBox.setText("")
 
-        #if self.encryptType == "cheaser":
-        #    data["message"] = encrypt(self.messageBox.toPlainText(), self.number)
-        #    data["number"] = self.number
-        #else:
-        #    message, n, e, d = rsa.Sifrele(self.messageBox.toPlainText())
-        #    data["message"] = message
-        #    data["n"] = n
-        #    data["e"] = e
-        #    data["d"] = d
-        #
+        splittedMessage = data["message"].split(" ")
+
+        if splittedMessage[0] in self.commands:
+            """
+            ? Buraya kullanıcıların kullanabileceği komutlar eklenebilir.
+            ? İstenirse doğru kullanımla birlikte modül kullanımı da yapılabilir.
+            """
+
+            if splittedMessage[0] == "!renkdeğiştir":
+                """
+                ? Kullanıcının rengini değiştirir.
+                ? Boş bırakılması durumunda rastgele bir renk seçilir ve kullanıcının rengi o renk ile değiştirilir.
+                ? Yanlış kullanımlarda kullanıcıyı uyaran bir yapı da mevcuttur.
+                """
+
+                splittedMessage.pop(0)
+
+                if len(splittedMessage) == 0:
+                    oldColor = self.color
+                    self.color = self.pickcolor()
+                    data["message"] = "Kendi rengimi <font color=\"{0}\">{0}</font> renginden <font color=\"{1}\">{1}</font> rengine değiştirdim.".format(oldColor, self.color)
+                    data["color"] = self.color
+                    del oldColor
+                else:
+                    if len(splittedMessage[0]) != 7 or splittedMessage[0][0] != "#":
+                        self.messageBox.setText("UYARI: Geçersiz renk.")
+                        return
+                    else:
+                        oldColor = self.color
+                        self.color = splittedMessage[0]
+                        data["message"] = "Kendi rengimi <font color=\"{0}\">{0}</font> renginden <font color=\"{1}\">{1}</font> rengine değiştirdim.".format(oldColor, self.color)
+                        data["color"] = self.color
+                        del oldColor
+
+        elif splittedMessage[0] in self.adminCommands:
+            """
+            ? İstenirse buraya yönetici komutları eklenebilir.
+            ? Şu anlık gerek duyulmadığı için boş bırakıldı.
+            ? Kullanımı yukarıdaki kullanıcı komut sistemi ile aynıdır.
+            """
+            pass
+        
+        """
+        ? Mesajımız buraqda şifrelenmektedir.
+        ? Şu anlık Sezar Şifreleme ve RSA şifreleme yöntemleri kullanılabilir.
+        ? İsteğe bağlı başka bir şifreleme yöntemi de bu kod hiyerarşisine bağlı kalınarak eklenebilir.
+        
+        ! ÖNEMLİ NOT: RSA yöntemindeki d anahtarının açık bir şekilde verilmesi kesinlikle güvenli değildir.
+        ! Sadece öğrenme ortamında modülün nasıl çalıştığının rahat görülebilmesi için böyle bir kullanım yapılmıştır.
+        ! d anahtarını bir yetkilendirme yoluyla şifreli olarak vermeniz tavsiye edilir.
+        """
+        if self.encryptType == "cheaser":
+            data["message"] = encrypt(data["message"], self.number)
+            data["number"] = self.number
+        else:
+            message, n, e, d = rsa.Sifrele(data["message"])
+            data["message"] = message
+            data["n"] = n
+            data["e"] = e
+            data["d"] = d
+            print("""
+            Şifreli Metin: {0}
+            n: {1}
+            e: {2}
+            d: {3}
+            """.format(message, n, e, d))
+        """
+        ? Sunucumuza mesaj bu şekilde gönderilir.
+        """
         websocket.emit("newMessage", data)
 
     def valueChanged(self):
+        """
+        ? Şifreleme bölümündeki rakam ayarlayıcının değiştirilmesi durumunda belirteçteki rakamı değiştirir.
+        """
         self.number = self.numSlider.value()
         self.numSliderIndicator.setText(str(self.numSlider.value()) + " harf")
     
     def cheaserSelected(self):
+        """
+        ? Şifreleme bölümünde Sezar Şifreleme metodunun seçilmesi durumunda gerekli düzenlemeler bu fonksiyonda yapılır.
+        """
         self.encryptType = "cheaser"
         self.numSlider.setEnabled(True)
         self.number = self.numSlider.value()
     
     def RSASelected(self):
+        """
+        ? Şifreleme bölümünde RSA Şifreleme metodunun seçilmesi durumunda gerekli düzenlemeler bu fonksiyonda yapılır.
+        """
         self.encryptType = "rsa"
         self.numSlider.setEnabled(False)
 
 class Monitor(QObject):
+    """
+    ? Sunucudan yeni bir mesaj geldiğinde bunu kullanıcıya gösteilmesi için hazırlayan bir sınıf yapısı.
+    """
 
-    updateText = pyqtSignal(str)
+    """
+    ? PyQT altyapısında bir olayın tetiklenmesi ve gerekli aksiyonların alınması için sinyaller kullanılır.
+    ? Biz burada kendimize özel mesaj geçmişinin değiştirilmesinde yardımcı olacak bir sinyal yaratıyoruz.
+    
+    * Not: Parantezin içindeki dict ibaresi bizim sinyal içinde göndereceğimiz verinin sözlük veri tipinde olacağını belirtir.
+    """
+    updateText = pyqtSignal(dict)
     
     def handle(self, data):
+        """
+        ? Mesaj geldiğinde ilk aşama olarak mesajın şifresi çözülür ve veriden kullanıcı adı verisi alınır.
+        ? Alınan bu veriler sinyalle arayüze gönderilmek üzere update_list fonksiyonuna sokulur.
+        """
         print("İstek geldi.")
         print("İşlem başlıyor...")
-        strHistory = ""
-        isFirst = True
-        for i in data["messageHistory"]:
-            if isFirst:
-                strHistory += i
-                isFirst = False
-            else:
-                strHistory += "\n{}".format(i)
-        self.update_list(strHistory)
+        
+        decryptedText = rsa.SifreCoz(data["messageHistory"], data["n"], data["e"], data["d"])
+        username = data["username"]
 
-    def update_list(self, history):
+        self.update_list(decryptedText, username)
+
+    def update_list(self, history, username):
+        """
+        ? PyQT altyapısında sinyalin tetiklenebilmesi için bir tetikleyici Thread yani İşlem oluşturmamız gerekir.
+
+        ? Thread'imize bize gelen mesaj ve kullanıcı adını ve sinyal tetikleme fonksiyonunu belirtiriz.
+        """
         print("update_list")
-        t_monitor = Thread(self.updateHistory, parent=self, messageHistory=history)
+        t_monitor = Thread(self.updateHistory, parent=self, messageHistory=history, username=username)
         t_monitor.daemon = True
         t_monitor.setObjectName("monitor")
         t_monitor.start()
     
-    def updateHistory(self, history):
+    def updateHistory(self, data):
+        """
+        ? Bu fonksiyon sinyalin içine gerekli verileri koyar ve sinyali tetikler.
+        """
         print("updateHistory")
-        self.updateText.emit(history)
+        self.updateText.emit(data)
 
 class Thread(QThread):
+    """
+    ? Sinyalin tetiklenmesini sağlayan tetikleyici sınıftır.
+    """
     def __init__(self, fn, parent=None, *args, **kwargs):
+        """
+        ? Sınıfımızı bu fonksiyon ile sinyali tetiklemeye hazırlarız.
+        """
         print("Thread_init")
         super(Thread, self).__init__(parent)
         self._fn = fn
@@ -312,21 +466,31 @@ class Thread(QThread):
         self._kwargs = kwargs
     
     def run(self):
+        """
+        ? Sinyalimizin tetiklendiği kısımdır.
+        ? Sinyalimize gerekli veriler yerleştirilir ve tetikleyici fonksiyon çalıştırılır.
+        """
         print("Thread_run")
-        self._fn(self._kwargs["messageHistory"])
+        self._fn({
+            "messageHistory": self._kwargs["messageHistory"],
+            "username": self._kwargs["username"]
+            })
 
+#? Uygulama yapılandırılır.
 app = QApplication(sys.argv)
 
-with open("./css/stylesheet.css", "r+") as css:
-    app.setStyleSheet(css.read())
-    css.close()
-
+#? Yeni mesaj sırasında gerekli eylemi uygulayacak olan sınıf yapılandırılır.
 monitor = Monitor()
 
+#? Arayüz yapılandırılır.
 ex = App(monitor=monitor)
 
 @websocket.on("messageHistoryChanged")
 def watch(data):
-    monitor.handle(data = data)
+    """
+    ? Sunucudan yeni bir mesaj geldiğinde gerekli işlemleri başlatacak fonksiyonu çağırır.
+    """
+    monitor.handle(data=data)
 
+#? Uygulama çalıştırılır.
 sys.exit(app.exec_())

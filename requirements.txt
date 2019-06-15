@@ -1,0 +1,4 @@
+python-socketio
+PyQt5
+requests
+plyer
