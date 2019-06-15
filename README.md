@@ -39,13 +39,52 @@ git branch dal-adi
 git checkout dal-adi
 ```
 
-Artık düzenleme yapmak için hazırsınız.
+Artık düzenleme yapmak için hazırsınız. Düzenlemelerinizi yaptıktan sonra değişiklikleri dala eklemek için şu komutları girin (düzenleme yaptığınız dalda):
+
+```sh
+git add .
+git commit -m "Yeni renk değiştirme komutları eklendi." #Yaptığınız düzenlemeleri tırnak içerisinde kısa bir şekilde anlatın.
+git push github #Eğer hata alırsanız git push origin komutunu deneyin.
+```
+
+Artık yaptığınız değişiklikler Github üzerinde kaydedilmiştir.
+Düzenlemelere önceden oluşturduğunuz dalda devam edebilirsiniz, yeni bir dal açmaya gerek yoktur.
+Sadece sonraki düzenlemede düzenlemeleri dala eklemeyi unutmayın.
 
 ### 3) Düzenlemeleri incelenmesi için paylaşmak
 
-Düzenlemeniz bittiğinde düzenlemelerinizi yaptığınız dalı master (git sisteminde ana dal) ile birleştirmek (merge) gerekir.
-Bu işlemi şöyle gerçekleştirebiliriz:
+Not: *Bu adımları tüm düzenlemelerinizi bitirdiğinizde ve artık düzenleme yaptığınız dalın projeye uygulamak için hazır olduğunda izleyin.*
 
+Düzenlemeniz bittiğinde düzenlemelerinizi yaptığınız dalı master (git sisteminde ana dal) ile birleştirmek (merge) gerekir.
+
+Bu işlemi Github'ın sitesi üzerinden yapabilirsininiz. Öncelikle projenin sayfasına gidin.
+Daha sonra `Branch` sekmesinden kendi oluşturduğunuz sekmeye gidin:
+![Proje ana sayfası](https://i.hizliresim.com/6DQB5W.png)
+
+Sizi yaptığınız değişiklikleri gösteren bir bölüm karşılayacaktır, burada `Compare & pull request` yazan butona tıklayın:
+![Branch ana sayfası](https://i.hizliresim.com/lQLX3X.png)
+
+Sonraki sayfada dalda yaptığınız bütün değişiklikleri gösteren bir sayfa karşılayacaktır.
+Bu sayfada en üstte `base` ayarının master'da, `compare` ayarının da düzenlemeleri yaptığınız dalda olduğundan emin olunuz.
+Daha sonra yaptığınız düzenlemeler için bir başlık girin, yaptığınız düzenlemeleri anlaşılabilir bir şekilde açıklayın.
+İsterseniz de dosyaları açıklamaya doğru sürükleyerek dosya iliştirebilirsiniz.
+Hazır olduğunuzda `Create pull request` butonuna tıklayın:
+![Pull request sayfası](https://i.hizliresim.com/od25X9.png)
+
+### 4) Sonraki adımlar
+
+Proje yöneticileri yaptığınız değişiklikleri inceleyecekler ve bir sorun olup olmadığını kontrol edeceklerdir.
+Bazen size bir soru ile geri dönüş yapabilirler, soruları anlaşılabilir bir şekilde cevaplamaya çalışın.
+Duruma bağlı olarak bir düzenleme yapmanız istenebilir.
+Eğer yaptığınız düzenlemeler projeye uygulanmak için uygunsa proje yöneticileri yaptığınız değişiklikleri uygulayacaktır.
+
+Not: Eğer uzaktan yapılan değişiklikleri bilgisayarınıza indirmek isterseniz bu komutu kullanın.
+Aksi takdirde yapacağınız sonraki değişiklikleri göndermenize izin verilmeyecektir:
 ```sh
-git checkout master
+git fetch github #Hata alırsanız git fetch origin komutunu deneyin.
+```
+
+Değişiklikler uygulandıktan sonra artık eski dala ihtiyaç duyulmayacaktır. Eski dalı şu komutla silebilirsiniz:
+```sh
+git branch -d dal-adi
 ```
