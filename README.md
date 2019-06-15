@@ -39,6 +39,13 @@ git branch dal-adi
 git checkout dal-adi
 ```
 
+Uygulamanın çalıştırabilmek için paket gereksinimlerini yüklemek gerekir.
+Gereken paketleri şu komutla yükleyebiliriz:
+
+```sh
+pip install -r requirements.txt
+```
+
 Artık düzenleme yapmak için hazırsınız. Düzenlemelerinizi yaptıktan sonra değişiklikleri dala eklemek için şu komutları girin (düzenleme yaptığınız dalda):
 
 ```sh
