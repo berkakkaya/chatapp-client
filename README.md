@@ -7,7 +7,7 @@ Bu proje Dündar Çiloğlu Programlama Takımı'nın kodları incelemesi ve geli
 
 **Not: _Bu projenin kaynak kodlarını bu grup dışında başka bir kişi ile paylaşmak yasaktır._**
 
-_Not: Şifreli Mesajlaşma Uygulaması'nın sunucu kodlarına [buradan ulaşabilirsiniz.](https://www.google.com)_
+_Not: Şifreli Mesajlaşma Uygulaması'nın sunucu kodlarına [buradan ulaşabilirsiniz.](https://github.com/berkakkaya/chatapp-server)_
 
 ## Katkıda Bulunma
 
@@ -32,7 +32,7 @@ Git sisteminde düzenli bir çalışma yapabilmeniz ve projede karmaşa olmamas�
 
 Şimdi şu komutları sırasıyla girin ve bu kodları kendinize göre ayarladıktan sonra ENTER tuşuna basın:
 
-*Not: Kendi dalınızın adını girmeniz gereken yerler `dal-adi` olarak belirtilmiştir. Buralardaki `dal-adi` belirteçlerinin yerine kendi dalınızın adını giriniz.*
+Not: *Kendi dalınızın adını girmeniz gereken yerler `dal-adi` olarak belirtilmiştir. Buralardaki `dal-adi` belirteçlerinin yerine kendi dalınızın adını giriniz.*
 
 ```sh
 git branch dal-adi
@@ -80,11 +80,13 @@ Eğer yaptığınız düzenlemeler projeye uygulanmak için uygunsa proje yönet
 
 Not: Eğer uzaktan yapılan değişiklikleri bilgisayarınıza indirmek isterseniz bu komutu kullanın.
 Aksi takdirde yapacağınız sonraki değişiklikleri göndermenize izin verilmeyecektir:
+
 ```sh
 git fetch github #Hata alırsanız git fetch origin komutunu deneyin.
 ```
 
 Değişiklikler uygulandıktan sonra artık eski dala ihtiyaç duyulmayacaktır. Eski dalı şu komutla silebilirsiniz:
+
 ```sh
 git branch -d dal-adi
 ```
