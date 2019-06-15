@@ -59,17 +59,17 @@ Düzenlemeniz bittiğinde düzenlemelerinizi yaptığınız dalı master (git si
 
 Bu işlemi Github'ın sitesi üzerinden yapabilirsininiz. Öncelikle projenin sayfasına gidin.
 Daha sonra `Branch` sekmesinden kendi oluşturduğunuz sekmeye gidin:
-![Proje ana sayfası](https://i.hizliresim.com/6DQB5W.png)
+![Proje ana sayfası](./md/1.png)
 
 Sizi yaptığınız değişiklikleri gösteren bir bölüm karşılayacaktır, burada `Compare & pull request` yazan butona tıklayın:
-![Branch ana sayfası](https://i.hizliresim.com/lQLX3X.png)
+![Branch ana sayfası](./md/2.png)
 
 Sonraki sayfada dalda yaptığınız bütün değişiklikleri gösteren bir sayfa karşılayacaktır.
 Bu sayfada en üstte `base` ayarının master'da, `compare` ayarının da düzenlemeleri yaptığınız dalda olduğundan emin olunuz.
 Daha sonra yaptığınız düzenlemeler için bir başlık girin, yaptığınız düzenlemeleri anlaşılabilir bir şekilde açıklayın.
 İsterseniz de dosyaları açıklamaya doğru sürükleyerek dosya iliştirebilirsiniz.
 Hazır olduğunuzda `Create pull request` butonuna tıklayın:
-![Pull request sayfası](https://i.hizliresim.com/od25X9.png)
+![Pull request sayfası](./md/3.png)
 
 ### 4) Sonraki adımlar
 
