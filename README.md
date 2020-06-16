@@ -5,13 +5,12 @@
 Şifreli Mesajlaşma Uygulaması'nın istemci kodlarıdır.
 
 Projenin asıl amacı şifreleme sisteminin mantığını göstermektir ve Python'da bir mesajlaşma uygulamasının nasıl yapılabileceğini göstermektir.
-Eğitim amaçlı hazırlanmıştır. Projeyi kullanmak istiyorsanız aşağıdaki notu okuyun.
-
-_**Önemli Not: Hem sunucu hem de istemci uygulamalarının sade haliyle kullanılması tavsiye edilmez. Uygulamalarda güvenlik sorunları mevcut**_
-_**(paketi gönderme biçiminden kaynaklı) ve bazen hız problemleri yaşıyorlar**_
-_**(sorun RSA modülünden kaynaklı, çünkü anahtarları her seferinde sıfırdan üretiyor).**_
+Eğitim amaçlı hazırlanmıştır.
 
 _Not: Şifreli Mesajlaşma Uygulaması'nın sunucu kodlarına [buradan ulaşabilirsiniz.](https://github.com/dundar-ciloglu-programming-team/chatapp-server)_
+
+Projeyi hazırlayan takım üyeleri:
+* [@berkakkaya](https://github.com/berkakkaya)
 
 ## Katkıda Bulunma
 
