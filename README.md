@@ -11,7 +11,7 @@ _**Önemli Not: Hem sunucu hem de istemci uygulamalarının sade haliyle kullan�
 _**(paketi gönderme biçiminden kaynaklı) ve bazen hız problemleri yaşıyorlar**_
 _**(sorun RSA modülünden kaynaklı, çünkü anahtarları her seferinde sıfırdan üretiyor).**_
 
-_Not: Şifreli Mesajlaşma Uygulaması'nın sunucu kodlarına [buradan ulaşabilirsiniz.](https://github.com/berkakkaya/chatapp-server)_
+_Not: Şifreli Mesajlaşma Uygulaması'nın sunucu kodlarına [buradan ulaşabilirsiniz.](https://github.com/dundar-ciloglu-programming-team/chatapp-server)_
 
 ## Katkıda Bulunma
 
