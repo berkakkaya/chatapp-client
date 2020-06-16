@@ -9,7 +9,7 @@ Eğitim amaçlı hazırlanmıştır.
 
 _Not: Şifreli Mesajlaşma Uygulaması'nın sunucu kodlarına [buradan ulaşabilirsiniz.](https://github.com/dundar-ciloglu-programming-team/chatapp-server)_
 
-Projeyi hazırlayan takım üyeleri:
+**Projeyi hazırlayan takım üyeleri:**
 * [@berkakkaya](https://github.com/berkakkaya)
 
 ## Katkıda Bulunma
